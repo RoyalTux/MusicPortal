@@ -1,0 +1,52 @@
+﻿@model MusicPortal.Models.Songs.SongDetailsModel
+@using Microsoft.AspNet.Identity;
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<div class="container">
+    <div class="row" style="padding-top: 20px">
+        <div class="col-lg-4">
+            @if (Model.ImagePath != null)
+            {
+                <img src="@Model.ImagePath" class="img-responsive img-thumbnail" style="width 300px; height 300px" />
+            }
+            else
+            {
+                <img src="~/Content/Images/default.png" class="img-responsive img-thumbnail" style="width 300px; height 300px" />
+            }
+            <div class="row" style="padding-top:30px; text-align:center" >
+                <a class="btn btn-default btn-sm" href="/Song/List?user=@Model.User.UserName" >All Songs By This User</a>
+            </div>
+            <div class="row" style="padding-top:10px; text-align:center">
+                <a class="btn btn-default btn-sm" href="/Song/List?=@Model.Genre">All Songs In This Genre</a>
+            </div>
+        </div>
+       <div class="col-lg-8">
+           <div class="row">
+               <h3>
+                   @Model.Artist - @Model.Title
+               </h3>
+           </div>
+           <div class="row">
+               <audio preload="auto" controls="controls" src="@Model.FilePath" style="width: 750px"></audio>
+           </div>
+           <div class="row">
+               <h4>Additional information</h4>
+               <p style="white-space:pre-wrap">
+                   @Model.Details
+               </p>
+               
+           </div>
+       </div>
+    </div>
+    <footer class="pull-right" style="padding-right: 10px">
+        @if (User.IsInRole("Admin") || Model.IsAuthor(User.Identity.GetUserName()))
+        {
+            @Html.ActionLink("Edit", "Edit", "Song", new { @id = Model.Id }, new { @class = "btn btn-warning btn-sm"})
+            @Html.ActionLink("Delete", "Delete", "Song", new { @id = Model.Id }, new { @class = "btn btn-danger btn-sm" })
+        }
+        @Html.ActionLink("Back", "List", "Song", null, new { @class = "btn btn-default btn-sm" })
+    </footer>
+</div>
